@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 //Esto es propio de rxjs y crea numeros cada cierto tiempo
 import { interval, map } from 'rxjs';
 @Component({
@@ -8,7 +15,15 @@ import { interval, map } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  clickCount = signal(0);
+
+  constructor() {
+    effect(() => {
+      console.log(`clic numero ${this.clickCount()}`);
+    });
+  }
   ngOnInit(): void {
+    /* 
     //El tiempo en milisegundos y la constante es para que se limpie del dom al construirse el elemento
     const subscription = interval(1000)
       //Esto es un operador
@@ -23,6 +38,9 @@ export class AppComponent implements OnInit {
     //Esto destruye la suscripción
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
-    });
+    });*/
+  }
+  onclick() {
+    this.clickCount.update((prevCount) => prevCount + 1);
   }
 }
